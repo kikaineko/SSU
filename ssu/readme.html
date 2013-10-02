@@ -1,0 +1,1246 @@
+<html>
+<head>
+<title>SSU(ShellScript Unit)</title>
+</head>
+<body>
+<font color="red"><b>SSU(ShellScript Unit)</b></font><br>
+<br>
+SSUはShell用のテスティングフレームワークです。xUnitのshell用の一つであると考えてください。
+主にK-shell、bashを対象にしています。<br>
+SSUは以下の機能を持ちます。<br>
+<br>
+<ul>
+<li><a href="#assert">豊富な検証関数</a></li>
+<li><a href="#assert_conv">各文字のコード強制変換モード</a></li>
+<li><a href="#helper">ヘルパー関数</a></li>
+<li><a href="#codecoverage">コードカバレッジ計測機能</a></li>
+<li><a href="#util">豊富なUtil関数</a></li>
+<li><a href="#evi">エビデンス取得</a></li>
+<li><a href="#perf">パフォーマンス測定機能</a></li>
+<li><a href="#beforeafter">テスト前後の共通化</a></li>
+<li><a href="#debug">デバックモード</a></li>
+<li><a href="#target">特定のテストのみの実行</a></li>
+</ul>
+また、導入方法などは以下を参照ください<br>
+<ul>
+<li><a href="#install">導入方法</a></li>
+<li><a href="#howto">使用方法</a></li>
+<li><a href="#suite">テストスイート使用方法</a></li>
+<li><a href="#moji">文字コード指定方法</a></li>
+</ul>
+<br>
+<a href="#license">ライセンスと作者とか</a>
+<br>
+<br>
+<br>
+<a name="assert"><b>豊富な検証関数</b></a><br>
+SSUには多くの簡易assertが定義されています。<br><br>
+<ul>数値に関する検証関数<br>
+<li><a href="#assert_num">assert_num()</a></li>
+<li><a href="#assert_not_same_num">assert_not_same_num()</a></li>
+<br><br>文字列に関する検証関数<br>
+<li><a href="#assert_str">assert_str()</a></li>
+<li><a href="#assert_not_same_str">assert_not_same_str()</a></li>
+<li><a href="#assert_blank_str">assert_blank_str()</a></li>
+<li><a href="#assert_include">assert_include()</a></li>
+<li><a href="#assert_not_include">assert_not_include()</a></li>
+<br><br>ディレクトリに関する検証関数<br>
+<li><a href="#assert_dir">assert_dir()</a></li>
+<li><a href="#assert_not_found_dir">assert_not_found_dir()</a></li>
+<br><br>ファイルに関する検証関数<br>
+<li><a href="#assert_file">assert_file()</a></li>
+<li><a href="#assert_not_found_file">assert_not_found_file()</a></li>
+<li><a href="#assert_blank_file">assert_blank_file()</a></li>
+<li><a href="#assert_include_in_file">assert_include_in_file()</a></li>
+<li><a href="#assert_not_include_in_file">assert_not_include_in_file()</a></li>
+<li><a href="#assert_same_file">assert_same_file()</a></li>
+<li><a href="#assert_FileDateOrder">assert_FileDateOrder()</a></li>
+<br><br>リターンコード(exit コード)に関する検証関数<br>
+<li><a href="#assert_return_code">assert_return_code()</a></li>
+<li><a href="#assert_exit_code">assert_exit_code()</a></li>
+<br><br>DBに関する検証関数<br>
+<li><a href="#assert_db_">assert_db*を使用する前提</a></li>
+<li><a href="#assert_db">assert_db()</a></li>
+<li><a href="#assert_db_ordered">assert_db_ordered()</a></li>
+<li><a href="#assert_db_include">assert_db_include()</a></li>
+<li><a href="#assert_db_count">assert_db_count()</a></li>
+<li><a href="#assert_db_connect">assert_db_connect()</a></li>
+<br><br>その他<br>
+<li><a href="#assert_true">assert_true()</a></li>
+<li><a href="#assert_false">assert_false()</a></li>
+</ul>
+<br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_num">assert_num</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>数値が等しいことを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>expect Value</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>actual Value</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+<tr bgcolor="#FFFFFF"><td>例 </td><td>asser_num 1 $num</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_str">assert_str</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>文字列が等しいことを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>expect Value</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>actual Value</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+<tr bgcolor="#FFFFFF"><td>例 </td><td>asser_str "pooh" $str</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_not_same_num">assert_not_same_num</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>数値が等しくないことを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>unexpect Value</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>actual Value</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_not_same_str">assert_not_same_str</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>文字列が等しくないことを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>unexpect Value</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>actual Value</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_return_code">assert_return_code</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>第1引数のコマンドを実行し、第2引数のリターンコードが返るかを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>command</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>return code</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+<tr bgcolor="#FFFFFF"><td>例 </td><td>assert_return_code "./tax.sh 100" 0</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_exit_code">assert_exit_code</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>第1引数のコマンドを実行し、第2引数のexit コードが返るかを検証する関数。発行するコマンド内でexitを実行してしまう場合はこちらを使用する</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>command</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>return code</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+<tr bgcolor="#FFFFFF"><td>例 </td><td>assert_exit_code "./tax.sh 100" 0</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_dir">assert_dir</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ディレクトリが存在することを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>directory name</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>comment(option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_not_found_dir">assert_not_found_dir</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ディレクトリが存在しないことを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>directory name</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>comment(option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_file">assert_file</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルが存在することを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file name</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_not_found_file">assert_not_found_file</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルが存在しないことを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file name</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_blank_str">assert_blank_str</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>文字列が空文字「""」であることを検証する関数(</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_blank_file">assert_blank_file</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルが空ファイルであることを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_include">assert_include</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>指定文字列が対象文字列(target)内に存在するかどうかを検証する</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>target</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_not_include">assert_not_include</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>指定文字列が対象文字列(target)内に存在しないかどうかを検証する</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>target</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_include_in_file">assert_include_in_file</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>指定文字列が対象ファイル内に存在するかどうかを検証する</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>file</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_not_include_in_file">assert_not_include_in_file</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>指定文字列が対象ファイル内に存在しないかどうかを検証する</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>file</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_same_file">assert_same_file</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルの内容が同じかどうかを検証する</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>expect file</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>other file</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>comment (option)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_FileDateOrder">assert_FileDateOrder</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルの更新日付を確認する</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>target file name</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>operaete ("<" ,">" ,"=" ,"!=" ,"<=" ,">=" )</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>timestamp (YYYY-MM-DD HH:MI:SS)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$4</td><td>comment (option)</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_FileDateOrder pooh.data > "2006/07/01 00:00:00"　</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_true">assert_true</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数（文字列）で与えられた条件式がtrueであるかどうかを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>condition (like "1 > 0")</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>comment (option)</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_true "1 > 0"　</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_false">assert_false</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数（文字列）で与えられた条件式がfalseであるかどうかを検証する関数</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>condition (like "1 > 0")</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>comment (option)</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_false "1 &lt 0"　</td></tr>
+</table><br>
+<br><br>
+<a name="assert_db_"><b>assert_db*を使用する際の前提</b></a><br/>
+SSUでは、DBの検証のためのassertを提供します。<br/>
+このDB接続にはJDBCを利用するため、各種の値設定が必要です。具体的には以下の変数を設定する必要があります。<br/>
+<br/>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td>SSU_JDBC_JAR</td><td>JDBC用のJARのパスを設定します。各種DBMSが提供するJARを指定してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td>SSU_JDBC_EXT_JAR</td><td>JDBCドライバが1つのJARだけで構成されない場合(IBM DB2等)、追加のJARを指定してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td>SSU_JDBC_CLASS</td><td>各種DBMSが提供するJDBC用のDriverを指定してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td>SSU_JDBC_URL</td><td>接続するURLを指定してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td>SSU_JDBC_USER</td><td>接続するユーザを指定してください。これとパスワードを設定しない場合、ユーザ指定なしで接続します。</td></tr>
+<tr bgcolor="#FFFFFF"><td>SSU_JDBC_PASSWORD</td><td>接続するパスワードを指定してください。これとユーザを設定しない場合、ユーザ指定なしで接続します。</td></tr>
+</table><br/>
+設定例：<br/>
+SSU_JDBC_JAR="oracle/ojdbc14.jar";<br/>
+SSU_JDBC_CLASS="oracle.jdbc.driver.OracleDriver";<br/>
+SSU_JDBC_URL="jdbc:oracle:thin:@localhost:1521:xe";<br/>
+SSU_JDBC_USER="system";<br/>
+SSU_JDBC_PASSWORD="pooh";<br/>
+<br/><br/>
+assert_db*系では、ファイルの内容とDBを比較しますが、そのファイルのフォーマットは以下の通りです。<br/>
+<br/>
+ファイル形式：CSV<br/>
+ファイル一行目：列名<br/>
+ファイル２行目以降：データ部<br/>
+<br/>
+DBとの比較はファイルの1行目で指定された列名のみselectし、比較します。<br/>
+発行するselect文は、<br/>
+select "csvファイルの1行目" from "引数で指定されたテーブル名"<br/>
+ですので、複数の表を指定することも可能です。<br/>
+<br/>
+<br/>
+★assert_db_includeの例<br/>
+例えば、以下のような列を持つEmp表が存在したとします。<br/>
+<br/>
+int id,varchar name, varchar sex,date update_date<br/>
+<br/>
+このときに、id=1,name="pooh",sex="man,maybe"というデータがEmp表に存在しているかどうかを確認するには、<br/>
+次のようなファイルを作成します。（仮にemp1.csvという名前にします）<br/>
+<br/>
+>cat emp1.csv<br/>
+id,name,sex<br/>
+1,pooh,"man,maybe"<br/>
+<br/>
+そして、assert_db_includeを呼び出します。<br/>
+<br/>
+assert_db_include "emp1.csv" "Emp"<br/>
+<br/>
+完全にファイル内容と一致するかどうかを確認したい場合は、assert_dbを使用してください。<br/>
+<br/>
+<br/>
+また、DBとの接続のみを試したい場合には<br/>
+assert_db_connect<br/>
+を引数無しで呼び出してください。<br/>
+<br/>
+<br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_db">assert_db</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数で与えられたファイルの中身とテーブルの内容が一致するかどうかを検証する関数<br/>
+selectした結果のソート順を無視して、検証します。<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>ファイルパス(CSV)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>where条件 (option)　：selectのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。</td></tr>
+<tr bgcolor="#FFFFFF"><td>$4</td><td>comment (option)：where条件を省略した場合、commentは指定できない。<br/>
+これは引数の4番目がコメントであると判断されているためである。where条件を指定せずにcommentを記述したい場合は、where条件に " "を指定すること。</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_db "emp.csv" 'V$EMP';　</td></tr>
+</table><br>
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_db_ordered">assert_db_ordered</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数で与えられたファイルの中身とテーブルの内容が一致するかどうかを検証する関数<br/>
+assert_dbとの違いは、ソート順を厳密に意識することです。selectした結果と、ファイルに記述されているデータの並び順は完全に一致しなくてはいけません。<br/>
+また、assert_db_orderedでエラーになった場合、エラー報告にどのカラムでエラーになったのかを報告します。<br/>
+assert_dbでは、そのような報告は不可能なので、より詳細にエラーを見たい場合は、この関数を使用してください<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>ファイルパス(CSV)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>where条件 (option)　：selectのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。</td></tr>
+<tr bgcolor="#FFFFFF"><td>$4</td><td>comment (option)：where条件を省略した場合、commentは指定できない。<br/>
+これは引数の4番目がコメントであると判断されているためである。where条件を指定せずにcommentを記述したい場合は、where条件に " "を指定すること。</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_db "emp.csv" 'V$EMP';　</td></tr>
+</table><br>
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_db_include">assert_db_include</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数で与えられたファイルの中身がテーブルの内容に含まれるかどうかを検証する関数<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>ファイルパス(CSV)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>where条件 (option)　：selectのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。</td></tr>
+<tr bgcolor="#FFFFFF"><td>$4</td><td>comment (option)：where条件を省略した場合、commentは指定できない。<br/>
+これは引数の4番目がコメントであると判断されているためである。where条件を指定せずにcommentを記述したい場合は、where条件に " "を指定すること。</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_db_include "emp.csv" 'V$EMP';　</td></tr>
+</table><br>
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_db_count">assert_db_count</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>Select件数が期待値と一致するかどうかを検証する関数<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>期待件数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>where条件 (option)　：selectのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。</td></tr>
+<tr bgcolor="#FFFFFF"><td>$4</td><td>comment (option)：where条件を省略した場合、commentは指定できない。<br/>
+これは引数の4番目がコメントであると判断されているためである。where条件を指定せずにcommentを記述したい場合は、where条件に " "を指定すること。</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_db_count 12 'V$EMP';　</td></tr>
+</table><br>
+
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_db_connect">assert_db_connect</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>DBとの接続のみを実行します。引数はありません。</td></tr>
+</table><br>
+<br>
+
+<a name="assert_conv"><b>各文字のコード強制変換モード</b></a><br>
+Java使用時の<a href="#moji">文字コード指定</a>をサポートする機能として、各文字のコードを強制的に変換する機能を提供します。<br>
+これは、WAVE DASH(波線）などのマッピングを解決するために提供されています。<br>
+<br>
+<a href="#moji">文字コード指定機能</a>では、全てのファイルアクセス、DBアクセス時の文字コードを指定しますが、
+この機能は、指定された一つ一つの文字を強制的に一つの文字にマッピングします。<br>
+ただし、本機能は本来的には異なる文字を強制的に同一文字とみなす処理ですので、使用においては十分に注意してください。<br/>
+<br>
+この機能には、ssu_convert.propertiesというファイルを使用します。
+サンプルとして、日本語使用でよく問題になる文字のマッピングを指定したssu_convert.propertiesをSSUに格納しています。<br/>
+ファイルの中身は以下のようになっています。
+
+<pre>
+#WAVE DASH
+\u301C=\uFF5E
+</pre>
+<br/>
+#行はコメント行として無視されます。また、各文字の指定はUTF8形式で指定してください。<br/>
+上記の指定では、「\uFF5E」という文字を「\u301C」という文字に強制変換掛けることを指定しています。<br/>
+複数の文字を一つの文字に強制変換掛けたい場合は、上記のような指定を複数行記述するか、あるいは<br/>
+\u301C=\uFF5E,\uFFF5F,・・・<br/>
+というように、カンマ区切りで指定してください。<br/>
+<br/>
+変換を行うタイミングは、ファイル・DBからデータを読み込んだ後です。<br/>
+つまり、Java内部の文字列として受け取った後に変換を実施します。
+純粋にUTF-8間の変換になるため、元のファイルを妥当でない文字コードで読み込んだ場合などはそもそもの文字が間違ってしまい、
+この機能が上手く動かなくなります。<br/>
+必須ではありませんが、本機能を使用する際には、文字コードを正しく指定してください。<br/>
+<br/>
+また、この機能は、現在のバージョンにおいてはassert_db*にのみ提供されています。<br/>
+<br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_db_with_conv">assert_db_with_conv</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>assert_dbに対して文字のコード強制変換を実施します。<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>ファイルパス(CSV)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>ssu_convert_file_path（option）使用するconvertファイルへのパスを指定。
+ファイル名まで指定する場合には、ssu_convert.propertiesという名前でなくても問題ない。<br/>
+また、ここを指定しない場合、SSU_HOMEにあるssu_convert.propertiesが使用される。</td></tr>
+<tr bgcolor="#FFFFFF"><td>$4</td><td>where条件 (option)　：selectのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。<br/>
+ssu_convert_file_pathを設定しない場合にはここは指定できない。
+</td></tr>
+<tr bgcolor="#FFFFFF"><td>$5</td><td>comment (option)：where条件/ssu_convert_file_pathを省略した場合、commentは指定できない。<br/>
+これは引数の5番目がコメントであると判断されているためである。</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_db_with_conv "emp.csv" 'V$EMP'　</td></tr>
+</table><br>
+<br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_db_ordered_with_conv">assert_db_ordered_with_conv</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>assert_db_orderedに対して文字のコード強制変換を実施します。<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>ファイルパス(CSV)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>ssu_convert_file_path（option）使用するconvertファイルへのパスを指定。
+ファイル名まで指定する場合には、ssu_convert.propertiesという名前でなくても問題ない。<br/>
+また、ここを指定しない場合、SSU_HOMEにあるssu_convert.propertiesが使用される。</td></tr>
+<tr bgcolor="#FFFFFF"><td>$4</td><td>where条件 (option)　：selectのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。<br/>
+ssu_convert_file_pathを設定しない場合にはここは指定できない。
+</td></tr>
+<tr bgcolor="#FFFFFF"><td>$5</td><td>comment (option)：where条件/ssu_convert_file_pathを省略した場合、commentは指定できない。<br/>
+これは引数の5番目がコメントであると判断されているためである。</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_db_ordered_with_conv "emp.csv" 'V$EMP'　</td></tr>
+</table><br>
+<br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_db_include_with_conv">assert_db_include_with_conv</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>assert_db_includeに対して文字のコード強制変換を実施します。<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>ファイルパス(CSV)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>ssu_convert_file_path（option）使用するconvertファイルへのパスを指定。
+ファイル名まで指定する場合には、ssu_convert.propertiesという名前でなくても問題ない。<br/>
+また、ここを指定しない場合、SSU_HOMEにあるssu_convert.propertiesが使用される。</td></tr>
+<tr bgcolor="#FFFFFF"><td>$4</td><td>where条件 (option)　：selectのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。<br/>
+ssu_convert_file_pathを設定しない場合にはここは指定できない。
+</td></tr>
+<tr bgcolor="#FFFFFF"><td>$5</td><td>comment (option)：where条件/ssu_convert_file_pathを省略した場合、commentは指定できない。<br/>
+これは引数の5番目がコメントであると判断されているためである。</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　assert_db_include_with_conv "emp.csv" 'V$EMP'　</td></tr>
+</table><br>
+<br><br>
+
+
+<a name="helper"><b>ヘルパー関数</b></a><br>
+ヘルパー関数とは、SSU特有の機能で、テスト終了時に元の状態に戻す機能のことです。<br>
+例えば、mvのヘルパー関数であるh_mvを例に取ると<br>
+<br>
+h_mv piglet pooh<br>
+<br>
+とすると pigletファイルを、poohファイルにmvします。そして、テスト終了時に、h_mv関数はこのmvを起こす前の状態に戻します。<br>
+つまり、pigletファイルをmvを起こす前のファイルに復元し、また、mvする前にpoohが無ければpoohは削除されます。mvする前にpoohが存在していた場合は、mvする前のpoohを復元します<br>
+テストの自動化では、テスト毎に環境に影響を与えないことが良いと考えられています。
+ヘルパー関数はこれを助けるための機能です。
+<ul>
+<li><a href="#h_mv">h_mv()</a></li>
+<li><a href="#h_chmod">h_chmod()</a></li>
+<li><a href="#h_chown">h_chown()</a></li>
+<li><a href="#h_cp">h_cp()</a></li>
+<li><a href="#h_rm">h_rm()</a></li>
+<li><a href="#h_mkdir">h_mkdir()</a></li>
+<li><a href="#h_cd">h_cd()</a></li>
+<li><a href="#h_make_file">h_make_file()</a></li>
+</ul>
+
+注意点：<br>
+ヘルパー関数を使用する場合、特にmv、cpなどを利用する場合は、ファイルが復元用にバックアップされます。<br>
+システムの空き容量やディレクトリの権限などにご注意ください。<br>
+（バックアップファイルはSSU.shが存在するディレクトリ以下に作成されます）<br>
+<br>
+<br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#h_mv">h_mv</a>
+</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>mv を実行し、テスト終了時に元の状態に戻す<br>
+h_mv piglet pooh<br>
+とすると pigletファイルを、poohファイルにmvします。そして、テスト終了時に、h_mv関数はこのmvを起こす前の状態に戻します。<br>
+つまり、pigletファイルをmvを起こす前のファイルに復元し、また、mvする前にpoohが無ければpoohは削除されます。mvする前にpoohが存在していた場合は、mvする前のpoohを復元します<br>
+<br>
+</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>src file(1 file only)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>dest file</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>options (like "-i" )</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#h_chmod">h_chmod</a>
+</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>chmod を実行し、テスト終了時に元に戻す</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>mod</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>file (1 file only)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#h_chown">h_chown</a>
+</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>chown を実行し、テスト終了時に元に戻す</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>own</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>file (1 file only)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#h_cp">h_cp</a>
+</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>cp を実行し、テスト終了時に元に戻す<br>
+h_cp piglet pooh<br>
+とすると pigletファイルを、poohファイルにcpします。そして、テスト終了時に、h_cp関数はこのcpを起こす前の状態に戻します。<br>
+つまり、cpする前にpoohが無ければpoohは削除されます。cpする前にpoohが存在していた場合は、cpする前のpoohを復元します<br>
+また、pigletファイルもcpを起こす前のファイルに復元されます<br>
+<br></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>src (1 file only)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>dest (1 file only)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>options (like "-i" )</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#h_rm">h_rm</a>
+</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>rm を実行し、テスト終了時に元に戻す<br>
+h_rm piglet<br>
+とすると pigletファイルを、rmします。そして、テスト終了時に、h_rm関数はこのrmを起こす前の状態に戻します。<br>
+つまりrmする前のpigletファイルに復元されます<br></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>src (1 file only)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>options (like "-i" )</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#h_mkdir">h_mkdir</a>
+</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>mkdir を実行し、テスト終了時にディレクトリを削除する。中身も全て削除されます<br>
+すでにディレクトリが存在する場合は、警告を表示し、何も実行しません。<br>
+またその場合、ディレクトリは削除されません。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>dir (1 dir only)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>options (like "-i" )</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#h_cd">h_cd</a>
+</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>cd を実行し、テスト終了時に元に戻す</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>dir (1 dir only)</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#h_make_file">h_make_file</a>
+</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>テスト中に一時ファイルを作成し、テスト終了時に削除する<br>
+既にファイルが存在した場合は、そのファイルを削除し、また新たなファイルを作成します。<br>
+また、その場合、テスト終了時には元々あったファイルを復元させます</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file (1 file only)</td></tr>
+</table><br>
+<br>
+<br>
+<a name="codecoverage"><b>コードカバレッジ計測機能</b></a><br>
+SSUでは、特定のシェルスクリプトに対してコードカバレッジを測定することが可能です。<br>
+テストコード中でstartSSUを実行する前に、下記のような関数を呼び出してください。<br>
+<br>
+add_ssuCoverageTarget　"./tax.sh" <br>
+<br>
+というように、カバレッジを測定したいシェルの相対パスを記述してください。<br>
+複数のシェルのカバレッジを測定することが可能です。<br>
+<br>
+全てのテストの実行が終了した後にコードのカバレッジが測定されます。<br>
+結果は、<br>
+<br>
+<font color="blue">
+==Coverage Report.==========================<br>
+./tax.sh<br/>
+75% passed!(6/8[passedCommandLines/allCommandLines])<br>
+below lines unpassed.<br>
+5 6.<br>
+============================================<br>
+</font>
+<br>
+というように表示されます。上記は実行行が8行あるうち、6行が実行されたことを示しています。<br>
+実行行とは、空白やコメント行などを抜いた行のことです。<br>
+そして、実行されなかったのは5行目と6行目であることを報告しています。<br>
+<br>
+<br>
+<font color=red>注意：</font><br>
+カバレッジ測定機能を使用すると、指定されたファイルが測定用ファイルに変換されます。<br>
+そのため指定したファイル、及びそのディレクトリに書き込み権限が必要です。<br>
+また、指定したファイルに定義した関数などの計測をしたい場合で、且つ測定用ファイルに変換する前の関数を読み込んでいる場合は、
+再度指定したファイルを読み込み直してください。beforeTest関数などを使用すると良いでしょう。<br>
+（測定用に変換されていない関数が実行される可能性を防ぐためです）<br>
+<br>
+<br>
+<a name="util"><b>豊富なUtil関数</b></a><br>
+SSUには多くの便利な関数が定義されています。<br><br>
+Util関数の具体的な仕様を確認したい場合は、同梱されているtestUtil.shで確認することができます。<br>
+（参考：これらの関数の一部はスクリプト言語Rubyを参考にして作られています）<br>
+<br>
+<ul>文字列に関するUtil関数<br>
+<li><a href="#u_str_capitalize"> u_str_capitalize</a></li>
+<li><a href="#u_str_chop">  u_str_chop</a></li>
+<li><a href="#u_str_delete">  u_str_delete</a></li>
+<li><a href="#u_str_downcase">  u_str_downcase</a></li>
+<li><a href="#u_str_isEmpty">  u_str_isEmpty</a></li>
+<li><a href="#u_str_gsub">  u_str_gsub</a></li>
+<li><a href="#u_str_isInclude">  u_str_isInclude</a></li>
+<li><a href="#u_str_index">  u_str_index</a></li>
+<li><a href="#u_str_insert"> u_str_insert</a></li>
+<li><a href="#u_str_reverse">  u_str_reverse</a></li>
+<li><a href="#u_str_size">  u_str_size</a></li>
+<li><a href="#u_str_split">  u_str_split</a></li>
+<li><a href="#u_str_upcase"> u_str_upcase</a></li>
+<li><a href="#u_str_toFilePermissionNumber">  u_str_toFilePermissionNumber</a></li>
+<br><br>
+数字に関するUtil関数<br>
+<li><a href="#u_num_toFilePermission"> u_num_toFilePermission</a></li>
+<br><br>
+ファイルに関するUtil関数<br>
+<li><a href="#u_f_isFile">  u_f_isFile</a></li>
+<li><a href="#u_f_isDir">  u_f_isDir</a></li>
+<li><a href="#u_f_getPermission">  u_f_getPermission</a></li>
+<li><a href="#u_f_getSize">  u_f_getSize</a></li>
+<li><a href="#u_f_getUser">  u_f_getUser</a></li>
+<li><a href="#u_f_getGroup">  u_f_getGroup</a></li>
+<li><a href="#u_f_getOwn">  u_f_getOwn</a></li>
+<li><a href="#u_f_getTimestamp">  u_f_getTimestamp</a></li>
+</ul>
+<br><br>
+DBに関するUtil関数<br>
+<ul>
+<li><a href="#u_db_insert"> u_db_insert</a></li>
+<li><a href="#u_db_select_to"> u_db_select_to</a></li>
+<li><a href="#u_db_select"> u_db_select</a></li>
+<li><a href="#u_db_delete"> u_db_delete</a></li>
+</ul>
+<br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_capitalize">u_str_capitalize</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>文字列を最初を大文字に、後を小文字に変換します。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>例：</td><td>　u_str_capitalize "XYZ" #-> Xyz </td></tr>
+</table><br>
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_chop">u_str_chop</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>最後の一文字を削除します。もし、最後が\r,\nであればそれを削除してさらに最後の文字を削除します。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+</table><br>
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_delete">u_str_delete</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>第1引数の文字列から、第2引数の文字を削除します。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>delete string</td></tr>
+</table><br>
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_downcase">u_str_downcase</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>小文字に変換します。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_isEmpty">u_str_isEmpty</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>文字列が空文字列かどうかを判断します。trueなら0をfalseなら1を返します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_gsub">u_str_gsub</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>第1引数の文字列に対して、第2引数の文字を、第3引数の文字に置換します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>pattern</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>replace</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_isInclude">u_str_isInclude</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>第1引数の文字列が、第2引数の文字を含んでいるかどうかを判断します<br>
+trueなら、0を、falseなら1を返します。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>other</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_index">u_str_index</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>第1引数の文字列中の何文字目に、第2引数の文字列を含んでいるかどうか返します<br>
+無い場合は-1を返します。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>other</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_insert">u_str_insert</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>第1引数の文字列中のindex字目に、第2引数の文字列を挿入します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>index</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>other</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_reverse">u_str_reverse</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>反転した文字列を返します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_size">u_str_size</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>文字列のサイズを返します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_split">u_str_split</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>文字列を空白で分割して、index番目の要素を返します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>index</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_upcase">u_str_upcase</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>大文字にします</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_str_toFilePermissionNumber">u_str_toFilePermissionNumber</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイル権限の文字列表現を数値表現に変換します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>string</td></tr>
+<tr bgcolor="#FFFFFF"><td>例1 </td><td>u_str_toFilePermissionNumber "rw-" #-> 6</td></tr>
+<tr bgcolor="#FFFFFF"><td>例2 </td><td>u_str_toFilePermissionNumber "rw-r--r--" #-> 644</td></tr>
+</table><br>
+<br>
+数字関係
+<br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_num_toFilePermission">u_num_toFilePermission</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイル権限の数値表現を文字列表現に変換します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>number</td></tr>
+<tr bgcolor="#FFFFFF"><td>例1 </td><td>u_num_toFilePermission 6 #-> "rw-"</td></tr>
+<tr bgcolor="#FFFFFF"><td>例2 </td><td>u_num_toFilePermission 644 #-> "rw-r--r--"</td></tr>
+</table><br>
+<br>
+ファイル関係
+<br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_f_isFile">u_f_isFile</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルかどうかを判定します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_f_isDir">u_f_isDir</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ディレクトリかどうかを判定します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>dir</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_f_getPermission">u_f_getPermission</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルのパーミッションを取得します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_f_getSize">u_f_getSize</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルのサイズを取得します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_f_getUser">u_f_getUser</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルのユーザを取得します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_f_getGroup">u_f_getGroup</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルのグループを取得します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_f_getOwn">u_f_getOwn</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルのユーザ.グループを取得します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_f_getTimestamp">u_f_getTimestamp</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルのタイムスタンプを取得します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>file</td></tr>
+</table><br>
+
+<br>
+DB関係
+<br>
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_db_insert">u_db_insert</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数で与えられたファイルのをinsertします。<br/>
+このUtil関数が対応しているのはOracleだけです。また、Oracleの日付のフォーマットは以下のフォーマット以外は正常にinsertされません。<br/>
+<ul>
+<li>Date型：yyyy/mm/dd、yyyy-mm-dd 、yyyymmdd</li>
+<li>Timestamp型：yyyy/mm/dd hh24:mi:ss 、yyyy-mm-dd hh24:mi:ss 、yyyymmdd hh24:mi:ss.SSS (時刻は「:」ではなく「/」or「-」でも対応します)
+yyyymmddhh24miss、yyyymmddhh24missSSS</li>
+</ul>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>ファイルパス(CSV)</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+</table><br>
+
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_db_select_to">u_db_select_to</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>Select結果をCSV形式でファイルに格納します。これは、u_db_insertで安全に格納できる形式で出力されます。<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>Select結果格納ファイルパス</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$3</td><td>where条件 (option)　：selectのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。</td></tr>
+</table><br>
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_db_select">u_db_select</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>Select結果を標準出力に表示します。これは、u_db_insertで安全に格納できる形式で出力されます。<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>where条件 (option)　：selectのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。</td></tr>
+</table><br>
+
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_db_delete">u_db_delete</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>テーブルの内容を削除します。この関数は削除した件数を標準出力に表示します。<br/>
+assert_db*を使用する際の前提も参照してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>where条件 (option)　：deleteのwhereを指定したい場合はここに条件を指定。<br/>
+指定がない場合は単純に全件検索を実行する。</td></tr>
+</table><br>
+
+<br>
+<br>
+
+<a name="evi"><b>エビデンス取得機能</b></a><br>
+SSUではエビデンスを取得する機能を提供します。<br/>
+この機能には大きく分けて2種類あります。<br/>
+エビデンスバックアップ機能とテスト結果保存機能です。<br/>
+<br/>
+まずはエビデンスバックアップ機能を説明します。<br/>
+DB、ファイル、ディレクトリをエビデンスとして所定のディレクトリに保存します。<br>
+デフォルトの保存先ディレクトリは以下の規則で作成されます。<br/>
+${SSU_HOME}/evidence/ユーザー名/日付/testシェル名/test関数名<br/>
+<br/>
+保存先ディレクトリを変更したい場合は、SSU_EVIDENCE_BASEDIRという変数に保存先ディレクトリを指定してください。<br/>
+指定したディレクトリ配下に、/evidence/ユーザー名/日付/testシェル名/test関数名というディレクトリが作成されます。<br/>
+<br/>
+また、保存用ファイル、ディレクトリには<br/>
+_1.log<br/>
+のように連番が振られた名前が付加されます。同一名のファイルを保存しようとしたときに、連番がカウントUPします。<br/>
+<br>
+<ul>
+<li><a href="#u_evi_db"> u_evi_db</a></li>
+<li><a href="#u_evi_file">  u_evi_file</a></li>
+<li><a href="#u_evi_dir">  u_evi_dir</a></li>
+</ul>
+<br><br>
+次にテスト結果保存機能を説明します。<br/>
+通常、テスト結果は標準出力に表示されますが、これらの結果をファイルにもレポートさせる機能です。（標準出力への出力は何も変わりません）<br/>
+evidence/ユーザー名/日付/testシェル名/report.txt<br/>
+というファイルにレポートさせます。<br/>
+<br>
+この機能を有効にするには、<br>
+SSU_REPORT=ON<br>
+と、して下さい。<br>
+<br>
+<br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_evi_db">u_evi_db</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>表の中身をエビデンスとして保存します。保存ファイル名は表名が使用されます。
+保存するファイル名を指定したい場合は第2引数で指定してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>テーブル名（スキーマを指定したい場合も、ここで指定する）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>保存ファイル名 (option)</td></tr>
+</table><br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_evi_file">u_evi_file</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ファイルをエビデンスとして保存します。保存ファイル名は元のファイル名が使用されます。
+保存するファイル名を指定したい場合は第2引数で指定してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>ファイルパス</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>保存ファイル名 (option)</td></tr>
+</table><br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#u_evi_dir">u_evi_dir</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>ディレクトリをエビデンスとして保存します。保存ディレクトリ名は元のディレクトリ名が使用されます。
+保存するディレクトリ名を指定したい場合は第2引数で指定してください。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>ディレクトリ</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>保存ディレクトリ名 (option)</td></tr>
+</table><br><br>
+
+<a name="#beforeafter"><b>テスト前後の共通化</b></a><br>
+SSUでも、xUnitでおなじみのsetUp/tearDownを使用できます。<br>
+また、JUnit4から追加されたテスト全体での前後処理beforeTest/afterTestも使用可能です。<br>
+これらの関数を、テストコードで定義してください。<br>
+<br>
+例：<br>
+beforeTest(){<br>
+	****(何らかの処理)<br>
+}<br>
+<br>
+<br>
+<a name="#perf"><b>パフォーマンス測定機能</b></a><br>
+SSUではパフォーマンスを測定する補助機能を提供しています。<br/>
+この機能は2種類あります。「1回の測定」と「複数回の測定」です。<br/>
+<br>
+<b>・1回の測定</b><br>
+以下のサンプルコードを見てください。<br/>
+<pre>
+test_time(){
+	timer_on #1
+	#.. なんらかの処理
+	assert_timer 1000 #2
+}
+</pre>
+<br/>
+timer_onから、assert_timerまでの時間を測定します。<br/>
+上記のコードでは、#1のtimer_onから、#2のassert_timerまでが「1000ミリ秒」以内であるかどうかを検証します。<br/>
+<br/>
+時間の検証にはassert_timerとcheck_timerの2つを提供しています。これらの違いは、「assert_timer」が検証に失敗すると
+そこれでテスト関数の実行を終了させます（通常のassert関数と同じ挙動です）。<br/>
+これに対して、check_timerは検証に失敗してもテスト関数を止めません。単にエラーを報告するだけです。<br/>
+<br/>
+注意：この時間測定処理のためにも時間が、わずかですが必要になるためあまりも厳しい時間の測定は注意してください。<br/>
+<br/>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#timer_on">timer_on</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>時間を測定する直前に、timer_onを呼び出してください。引数はありません。</td></tr>
+</table><br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_timer">assert_timer</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>timer_onからの時間が引数で指定した時間以内であるかを検証します。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>指定時間（ミリ秒）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>コメント (option)</td></tr>
+</table><br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#check_timer">check_timer</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>timer_onからの時間が引数で指定した時間以内であるかを検証します。<br>
+check_timerはassert_timerと異なりテストの実行は止めません。（単にエラーを報告するだけです）</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>指定時間（ミリ秒）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>コメント (option)</td></tr>
+</table><br><br>
+<br>
+
+<b>・複数回の測定</b><br>
+複数回の測定は、複数回実行時間を取得して、その平均や標準偏差を取得します。<br>
+機能の使用方法も「1回の測定」とは異なります。<br>
+以下のサンプルコードを見てください。<br/>
+<pre>
+test_time(){
+	typeset cnt=0
+	while [ $cnt -lt 10 ]
+	do
+		plural_timer_on #1
+		#なんらかの処理
+		plural_timer_off #2
+		cnt=$(($cnt + 1))
+	done
+	plural_timer_report #3
+}
+</pre>
+<br>
+複数回の測定では、plural_timer_onからplural_timer_offまでの時間を測定します。<br>
+plural_timer_onとplural_timer_offのセットを複数回呼べば、その呼んだ回数で平均や標準偏差を計算します。
+そして、最後に測定結果をレポートさせているのが#3のplural_timer_reportです。<br>
+<br>
+以下のような、レポートを表示します。<br>
+<pre>
+average = 349.8 milli sec.
+standard-deviation = 138.950206908806 milli sec.
+max = 765 milli sec.
+min = 282 milli sec.
+count = 10
+</pre>
+<br>
+また、1回の測定と同様に検証も可能です。assert_plural_timerとcheck_plural_timerの2つがあります。使い方はassert_timerと同様です。<br>
+但し、平均値と比較されます。<br>
+<br>
+<br/>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#plural_timer_on">plural_timer_on</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>時間を測定する直前に、plural_timer_onを呼び出してください。引数はありません。</td></tr>
+</table><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#plural_timer_off">plural_timer_off</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>時間を測定する直後に、plural_timer_offを呼び出してください。引数はありません。</td></tr>
+</table><br>
+<br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#plural_timer_report">plural_timer_report</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>複数回の測定のレポートを出力します。引数なしで呼び出した場合、全てのレポートを出力します。
+引数を指定した場合、該当する測定値のみ、出力します。</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>測定値指定（option）：<br>
+<ul>
+<li>ave : 平均値を出力します。</li>
+<li>sd  : 標準偏差を出力します。</li>
+<li>max : 最大値を出力します。</li>
+<li>min : 最小値を出力します。</li>
+<li>count : 取得件数を出力します。</li>
+</ul>
+</td></tr>
+</table><br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#assert_plural_timer">assert_plural_timer</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>平均時間が引数で指定した時間以内であるかを検証します</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>指定時間（ミリ秒）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>コメント (option)</td></tr>
+</table><br><br>
+<table border=0 bgcolor="#000000" cellspacing=1 cellpadding=1>
+<tr bgcolor="#FFFFFF"><td colspan=2><a name="#check_plural_timer">check_plural_timer</a></td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>平均時間が引数で指定した時間以内であるかを検証します。<br>
+check_plural_timerはassert_plural_timerと異なりテストの実行は止めません。（単にエラーを報告するだけです）</td></tr>
+<tr bgcolor="#FFFFFF"><td colspan=2>引数</td></tr>
+<tr bgcolor="#FFFFFF"><td>$1</td><td>指定時間（ミリ秒）</td></tr>
+<tr bgcolor="#FFFFFF"><td>$2</td><td>コメント (option)</td></tr>
+</table><br><br>
+<br>
+
+<br>
+<br>
+<a name="#debug"><b>デバッグモード</b></a><br>
+SSUでは、デバックモードを用いることで、より詳細な情報を出力することができます。<br>
+テストコード内で<br>
+<br>
+SSU_DEBUG_MODE=ON<br>
+<br>
+と、してください。<br>
+デバックモードを有効に使用するには、assert関数の引数でコメントを指定するほうが良いでしょう。<br>
+<br>
+<br>
+<a name="#target"><b>特定のテストのみの実行</b></a><br>
+SSUでは、SSU_TEST_PATTERNという変数を用いて、実行するテストを決定しています。<br>
+デフォルトは<br>
+<br>
+SSU_TEST_PATTERN="^test";<br>
+<br>
+となっており、testから始まる関数名を全て実行するようになっています。<br>
+この変数をテストコードで再定義することによって、特定のテストのみ実行することが可能になります。<br>
+<br>
+<br>
+<a name="#install"><b>導入方法</b></a><br>
+インストールというほどたいした作業はありません。<br>
+以下のファイルを任意のディレクトリに配置してください。<br>
+その際に、配置するディレクトリに書き込み権限を与えてください。ここに一時用ファイルなどを作成します。<br>
+<ul>
+<li>SSU.sh</li>
+<li>Assert.sh</li>
+<li>Util.sh</li>
+<li>ssu.jar</li>
+</ul>
+<br>
+また、SSUを使用するにはjava環境が必要です。<br>
+<br>
+<b><a name="#howto">使用方法</a></b><br>
+以下にテストコードのサンプルを示します。
+
+<pre style="background:#eaeaea;;">
+#!/usr/bin/sh
+. /home/masayuki/ssu/SSU.sh #1. Testツールを読み込む
+SSU_JAVA_CMD="/opt/java/bin/java"; #1.1. Javaへのパスを設定する（不要な場合もある）
+SSU_HOME=".." #2. テストツールへの相対パスを指定する
+
+SSU_TARGET_FOR_COVERAGE="tax.sh" #3. カバレッジを取得したいシェルを相対パスで指定。
+
+#4. before afterを定義
+beforeTest(){
+  echo "before"
+}
+afterTest(){
+  echo "after"
+}
+
+#5. setup tearDownを定義
+setUp(){
+	echo "setUp"
+}
+tearDown(){
+	echo "tearDown"
+}
+
+#6. テスト関数を定義
+test_sample(){
+	zeikomi=`./tax.sh 100`
+	assert_num 1 $?
+	assert_num 105 ${zeikomi} "sample_comment"
+	assert_return_code "./tax.sh aaa" 1
+}
+
+test_sample2(){
+	#mvのヘルパー関数。テスト終了後にmvを自動で元に戻す
+	h_mv tax.def tax.def.backup
+	
+	message=`./tax.sh 100`
+	assert_num 2 $?
+	assert_str "not found tax.def!" "${message}"
+}
+
+startSSU; #7. Testを実行する
+
+</pre>
+<br>
+まずは、1でSSU.shを読み込みます。<br>
+そして、SSUではJavaを使用するため、1.1でSSU_JAVA_CMDを指定しています。既にJavaへのパスが通っている場合には不要です。<br>
+次に2で、SSU.shへの相対パスを定義してください。<br>
+この2つは必須です。<br>
+<br>
+もし、カバレッジを測定したい場合は、3のように指定してください。<br>
+<br>
+そして、6のようにtestで始まる関数を定義してください。<br>
+<br>
+また、必須ではないですが、テストの前後やsetUp、tearDownなどを定義することが可能です。<br>
+特に必要なければ定義する必要はありません。<br>
+<br>
+ちなみに、上記のサンプルでは<br>
+<br>
+<pre style="background:#eaeaea;;">
+beforeTest
+
+setUp
+test_sample
+tearDown
+
+setUp
+test_sample2
+tearDown
+
+afterTest
+</pre>
+<br>
+と、いうように動きます。<br>
+<br>
+そして、最後に7のようにstartSSUを呼び出してください。<br>
+これがSSU.shを実行するための関数です。<br>
+<br>
+<br>
+
+<b><a name="#suite">テストスイート使用方法</a></b><br>
+複数のテストシェルを実行したい場合にテストスイートを使用することができます。<br/>
+ただし、同一ディレクトリに存在するテストのみをスイートに含めることが可能です。<br/>
+<br/>
+以下にテストスイートのサンプルコードを例示します。<br/>
+
+<pre style="background:#eaeaea;;">
+#!/usr/bin/sh
+. ../ssu/SSU.sh #1. Testツールを読み込む
+
+add_SSUTestCmd "sh test_assert.sh" #2. TestScriptの実行を指定する
+add_SSUTestCmd "sh test_connect.sh"
+
+set_SUITE_DEBUG_MODE OFF #3. デバッグモードを指定する
+
+startSSUSuite; #テストスイートを実行する
+</pre>
+<br>
+まずは、1でSSU.shを読み込みます。<br/>
+通常のテストスクリプトで必要なSSU_HOMEの設定などはテストスイートでは不要です。
+(各テストスクリプト内の値が使用されます)<br>
+<br>
+次に、add_SSUTestCmd関数にテストの実行コマンドを指定します。テストスイートでは、この設定した順序で実行されます。<br>
+ここで指定できるテストコードは基本的にテストスイートスクリプトと同一ディレクトリで無くてはいけません。
+これは、テストスクリプト自体のディレクトリと、テストスイート実行のディレクトリが異なると
+ディレクトリパスの整合性が取れなくなってしまうためです。<br>
+また、ここでテストスクリプト以外のテストの実行を指定するとエラーとなります。<br>
+<br>
+3でデバッグモードを指定しています。set_SUITE_DEBUG_MODE関数の引数に「ON/OFF」を指定してください。
+これは、このスイートで実行される全てのテストシェルのデバッグモードを強制指定します。<br>
+つまり、各テストシェルでデバッグモードがONにされていても、この指定により全てOFFに切り替えることができます。<br>
+<br>
+最後にテストスイートの実行を開始します。<br>
+<br>
+スイートの実行では、エビデンスなどの格納先は一切変更されません。
+<br>
+<br>
+<br>
+<a name="#moji"><b>文字コード指定方法</b></a><br>
+SSUでは、Javaが利用する文字コードを指定することができます。<br/>
+これはいくつかのassert関数、いくつかのUtil関数、全てのdb接続に影響します。<br/>
+設定をしない場合環境が持つデフォルトの文字コードを使用します。（多くの場合これで問題ないでしょう）<br/>
+<br/>
+この設定には、ssu_code.propertiesという設定ファイルを用います。サンプルがSSUに同梱されています。<br/>
+このssu_code.propertiesをお好きな場所に格納し、テストコード中で<br/>
+<br/>
+SSU_CHARCODE<br/>
+<br/>
+という変数にそのファイルへのパスを記述してください。ファイル名まで指定する場合にはssu_code.propertiesという名前で無くても構いません。<br/>
+この変数にパスが格納されている間は、そのssu_code.propertiesが有効になります。<br/>
+設定を変更したい場合は、この変数を書き換えてください。<br/>
+また、設定をデフォルトに戻したい場合は、この変数に空文字を代入してください。<br/>
+<br/>
+ssu_code.defの記述サンプルは以下です。以下は、全ての文字コードに「Shift_JIS」を用いるように指定しています。<br/>
+<br/>
+<pre style="background:#eaeaea;;">
+FileReadCode=Shift_JIS
+FileWriteCode=Shift_JIS
+DBSelectCode=Shift_JIS
+FileReadCodeToDB=Shift_JIS
+FileWriteCodeFromDB=Shift_JIS
+</pre>
+各定義の意味は、以下の通りです。
+<br/>
+<ul>
+<li>FileReadCode : DBが関連しないファイル読み込みに関する文字コードを指定します。</li>
+<li>FileWriteCode : DBが関連しないファイル書き込みに関する文字コードを指定します。</li>
+<li>DBSelectCode : DBからSELECTを実行する際の文字コードを指定します。</li>
+<li>FileReadCodeToDB : DBが関連する際の、ファイル読み込みに関する文字コードを指定します。（例えばassert_dbなどのファイル読み込み）</li>
+<li>FileWriteCodeFromDB : DBが関連する際の、ファイル書き込みに関する文字コードを指定します。（例えばu_select_toなどのファイル書き込み）</li>
+</ul>
+
+<br/>
+<br/>
+<br/>
+<hr>
+<a name="#license"><b>ライセンスと作者とか</b></a><br>
+ライセンスはASP2.0です。<br>
+http://www.apache.org/licenses/LICENSE-2.0<br>
+<br>
+また作者は<br>
+Masayuki Ioki (kikainekox -at- google.com)と<br>
+Takumi Hosaka<br>
+Teruyuki Takazawaです。<br>
+<br>
+Version : 0.5<br>
+Date ; 2009.01.20<br>
+<br>
+</body>
+</html>
