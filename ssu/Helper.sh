@@ -540,10 +540,15 @@ h_db(){
 	
 	typeset __h_db_table_backup_src=`_ssu_TempFileName "${__h_db_table}"`;
 	touch "${__h_db_table_backup_src}"
+	typeset __h_db_table_backup_tbl=`basename ${__h_db_table_backup_src}`
 	
 	#db to file
 	u_db_select_to "${__h_db_table_backup_src}" "${__h_db_table}"
 	
+    #TODO db to backup db
+	echo "CREATE TABLE ${__h_db_table_backup_tbl} AS SELECT * FROM ${__h_db_table};">${__h_db_table_backup_src}
+	u_db_sql_exec "${__h_db_table_backup_src}"
+
 	#all erase
 	u_db_delete "${__h_db_table}" > /dev/null
 	
@@ -564,12 +569,18 @@ _ssu_tearDown_h_db(){
 	
 	typeset ___ssu_tearDown_h_db_table_backup=${_ssu_h_db_table_backup[${___ssu_tearDown_h_db_ind}]}
 	typeset ___ssu_tearDown_h_db_table_name=${_ssu_h_db_table_name[${___ssu_tearDown_h_db_ind}]}
+	typeset ___ssu_tearDown_h_db_table_name_bk=`basename ${___ssu_tearDown_h_db_table_backup}`
 	
 	#all erase
 	u_db_delete "${___ssu_tearDown_h_db_table_name}" > /dev/null
 	
 	#file to db
 	u_db_insert "${___ssu_tearDown_h_db_table_backup}" "${___ssu_tearDown_h_db_table_name}"
+
+	#TODO recover from backup table
+	echo "INSERT INTO ${___ssu_tearDown_h_db_table_name} SELECT * FROM ${___ssu_tearDown_h_db_table_name_bk};">${___ssu_tearDown_h_db_table_backup}
+	echo "DROP TABLE ${___ssu_tearDown_h_db_table_name_bk};">>${___ssu_tearDown_h_db_table_backup}
+	u_db_sql_exec "${___ssu_tearDown_h_db_table_backup}"
 	
 	rm -f "${___ssu_tearDown_h_db_table_backup}"
 	

@@ -7,7 +7,7 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
@@ -18,9 +18,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * 
+ *
  * @author Masayuki Ioki
- * 
+ *
  */
 class TimeF {
 
@@ -43,7 +43,7 @@ class TimeF {
 			}
 			else {
 				System.out.println(strTime);
-				return strTime;				
+				return strTime;
 			}
 		} else {
 			String[] timeArray = null;
@@ -148,7 +148,7 @@ class TimeF {
 
 	public static String toSFromDate(String s) {
 		String dbmsType = Mapper.getDbmsType();
-		if (dbmsType.equals(Mapper.DB2)) {
+		if (dbmsType.equals(Mapper.DB2) || dbmsType.equals(Mapper.NETEZZA)) {
 			// YYYY-MM-DD
 			if (s.indexOf("-") != -1) {
 				return s;
@@ -236,7 +236,7 @@ class TimeF {
 		if (t == null) {
 			return "";
 		}
-		
+
 		if (Mapper.getDbmsType().equals(Mapper.DB2)) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(t.getTime());

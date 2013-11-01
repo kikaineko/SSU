@@ -222,7 +222,7 @@ public class Mapper {
 			}
 			else if (getDbmsType().equals(ORACLE)) {
 				return TimeF.toSFromTimestamp(s).split("\\.")[0];
-			}
+			}else{return TimeF.toSFromDate(s);}
 		case Types.TIME:
 			return TimeF.toSFromTime(s);
 		case Types.TIMESTAMP:
@@ -307,6 +307,8 @@ public class Mapper {
 			else if (getDbmsType().equals(ORACLE)) {
 				java.sql.Timestamp ts0 = rset.getTimestamp(i);
 				return TimeF.toS(ts0).split("\\.")[0];
+			}else {
+				return TimeF.toS(rset.getDate(i));
 			}
 		case Types.TIME:
 			java.sql.Time t = rset.getTime(i);

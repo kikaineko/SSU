@@ -26,6 +26,10 @@ public class InsertMapper {
 		return s == null || s.length() == 0;
 	}
 
+	private static boolean isNull(String s){
+		return s.equalsIgnoreCase("null");
+	}
+
 
 	protected static String sanit(String s) {
 		if (s.indexOf("'") != -1) {
@@ -51,6 +55,9 @@ public class InsertMapper {
 			if (isEmpty(s)) {
 				return "''";
 			}
+			if (isNull(s)){
+				return "null";
+			}
 			return "'"+sanit(ss)+"'";
 		case Types.BIT:
 			if ("0".equals(s)
@@ -65,52 +72,70 @@ public class InsertMapper {
 			}
 		case Types.TINYINT:
 		case Types.SMALLINT:
-			if (!isEmpty(s)) {
+			if (isNull(s)){
+				return "null";
+			}else if (!isEmpty(s)) {
 				return Short.valueOf(s).toString();
-			} else {
+			} else  {
 				return "0";
 			}
 		case Types.INTEGER:
-			if (!isEmpty(s)) {
+			if (isNull(s)){
+				return "null";
+			} else if (!isEmpty(s)) {
 				return Integer.valueOf(s).toString();
-			} else {
+			} else  {
 				return "0";
 			}
 		case Types.BIGINT:
-			if (!isEmpty(s)) {
+			if (isNull(s)){
+				return "null";
+			} else if (!isEmpty(s)) {
 				return Long.valueOf(s).toString();
-			} else {
+			} else  {
 				return "0";
 			}
 		case Types.REAL:
-			if (!isEmpty(s)) {
+			if (isNull(s)){
+				return "null";
+			} else if (!isEmpty(s)) {
 				return Float.valueOf(s).toString();
-			} else {
+			} else  {
 				return "0";
 			}
 		case Types.FLOAT:
 		case Types.DOUBLE:
-			if (!isEmpty(s)) {
+			if (isNull(s)){
+				return "null";
+			} else if (!isEmpty(s)) {
 				return Double.valueOf(s).toString();
-			} else {
+			} else  {
 				return "0";
 			}
 		case Types.NUMERIC:
 		case Types.DECIMAL:
-			if (!isEmpty(s)) {
+			if (isNull(s)){
+				return "null";
+			} else if (!isEmpty(s)) {
 				return new BigDecimal(s).toString();
-			} else {
+			} else  {
 				return null;
 			}
 
 		case Types.DATE:
-			return datef(s);
+			if (isNull(s)){
+				return "null";
+			} else {return datef(s);}
 		case Types.TIME:
-			if (Mapper.getDbmsType().equals(Mapper.DB2)) {
+			if (isNull(s)){
+				return "null";
+			} else if (Mapper.getDbmsType().equals(Mapper.DB2)) {
 				return (!isEmpty(s)) ? "'" + s + "'" : null;
 			}
 		case Types.TIMESTAMP:
-			return timestampf(s);
+			if (isNull(s)){
+				return "null";
+			}else{return timestampf(s);}
 		default:
 			break;
 		}
