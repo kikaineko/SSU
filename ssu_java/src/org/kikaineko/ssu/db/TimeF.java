@@ -88,10 +88,13 @@ class TimeF {
 			}
 
 			return ymd + "-" + hms + "." + micros;
-		} else if (Mapper.getDbmsType().equals(Mapper.ORACLE)) {
+		} else if (Mapper.getDbmsType().equals(Mapper.ORACLE)||Mapper.getDbmsType().equals(Mapper.NETEZZA)) {
 			String[] dateArray = null;
 			String[] timeArray = null;
 			String mil = "000";
+			if(Mapper.getDbmsType().equals(Mapper.NETEZZA)){
+				mil = "0";
+			}
 			if (s.indexOf(" ") != -1) {
 				String[] temp = s.split(" ");
 				String date = temp[0];
@@ -163,7 +166,7 @@ class TimeF {
 				String[] str = s.split("\\.");
 				return str[2] + "-" + str[1] + "-" + str[0];
 			}
-		} else if (dbmsType.equals(Mapper.ORACLE)) {
+		} else if (dbmsType.equals(Mapper.ORACLE) || dbmsType.equals(Mapper.NETEZZA)) {
 			if (s == null || s.length() == 0) {
 				return "";
 			}

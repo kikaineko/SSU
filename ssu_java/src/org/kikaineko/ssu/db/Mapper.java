@@ -259,7 +259,7 @@ public class Mapper {
 				}
 				return s;
 			}
-			return "";
+			return "null";
 
 		case Types.BINARY:
 		case Types.VARBINARY:
