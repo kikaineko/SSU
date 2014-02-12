@@ -7,7 +7,7 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
@@ -27,7 +27,7 @@ import org.kikaineko.ssu.exception.DBCheckException;
 import org.kikaineko.ssu.exception.SSUException;
 import org.kikaineko.util.FileIO;
 /**
- * 
+ *
  * @author Masayuki Ioki
  *
  */
@@ -63,7 +63,7 @@ public class SelectCommand {
 				sb.append(rsmd.getColumnName(i + 1));
 			}
 			sb.append(BR);
-			
+
 			while (rset.next()) {
 				String name = (String) names.get(0);
 				int type = ((Integer) types.get(0)).intValue();
@@ -119,7 +119,7 @@ public class SelectCommand {
 					&& !where.trim().equals(".")) {
 				sql += " " + where.trim();
 			}
-			
+
 			rset = stmt.executeQuery(sql);
 			ResultSetMetaData rsmd = rset.getMetaData();
 
@@ -196,10 +196,10 @@ public class SelectCommand {
 	}
 
 	/**
-	 * 
+	 *
 	 * flag is complete or include. complete is [CSV = Table].
 	 * include is [CSV <= Table].<br/>
-	 * 
+	 *
 	 * @param flag
 	 * @param filePath
 	 * @param jdbcClass
@@ -227,6 +227,7 @@ public class SelectCommand {
 			throw new SSUException("no data in " + filePath);
 		}
 		String head = (String) fileData.get(0);
+		head = head.replace("\t", ",");
 		fileData.remove(0);
 		List csvdata = CSVParser.getCSVLineList(fileData);
 		int max = ((List) csvdata.get(0)).size();
@@ -242,7 +243,7 @@ public class SelectCommand {
 					&& !where.trim().equals(".")) {
 				sql += " " + where.trim();
 			}
-			
+
 			rset = stmt.executeQuery(sql);
 			ResultSetMetaData rsmd = rset.getMetaData();
 
@@ -289,7 +290,7 @@ public class SelectCommand {
 						break;
 					}
 				}
-				
+
 				ArrayList temp = new ArrayList();
 				for (int i = 1; i <= max; i++) {
 					Object o = Mapper
@@ -308,7 +309,7 @@ public class SelectCommand {
 				int index = -1;
 				for (int i = 0; i < csvMapped.size(); i++) {
 					List csvtmp = (List) csvMapped.get(i);
-										
+
 					if (csvtmp.equals(temp)) {
 						index = i;
 						break;
@@ -401,7 +402,7 @@ public class SelectCommand {
 			if (where != null && where.trim().length() != 0) {
 				sql += " " + where;
 			}
-			
+
 			rset = stmt.executeQuery(sql);
 			rset.next();
 			String res = rset.getString(1);
