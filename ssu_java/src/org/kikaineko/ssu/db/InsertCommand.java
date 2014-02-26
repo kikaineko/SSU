@@ -48,10 +48,11 @@ public class InsertCommand {
 		fileData.remove(0);
 		//sano - if last row is blank, remove.
 		if(fileData.size()>0){
-		int lastRec = fileData.size() - 1;
-		if(((String) fileData.get(lastRec)).equals("")){
-			fileData.remove(lastRec);
-		}}
+			int lastRec = fileData.size() - 1;
+			if(((String) fileData.get(lastRec)).equals("")){
+				fileData.remove(lastRec);
+			}
+		}
 		List csvdata = CSVParser.getCSVLineList(fileData);
 		Connection conn = null;
 		Statement stmt = null;
