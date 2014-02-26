@@ -1,3 +1,6 @@
 .svn/
 */.svn/
 ssu_java/.project
+ssu_java/.classpath
+ssu_java/.settings/
+ssu_java/bin

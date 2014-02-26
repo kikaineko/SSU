@@ -227,6 +227,7 @@ public class SelectCommand {
 			throw new SSUException("no data in " + filePath);
 		}
 		String head = (String) fileData.get(0);
+		//for select SQL composition, change delimiter to comma - sano
 		head = head.replace("\t", ",");
 		fileData.remove(0);
 		List csvdata = CSVParser.getCSVLineList(fileData);
