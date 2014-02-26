@@ -7,13 +7,13 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
 package org.kikaineko.ssu.csv;
 /**
- * 
+ *
  * @author Masayuki Ioki
  *
  */
@@ -33,14 +33,14 @@ class CSVTokenAutomaton {
 			closedEnd(c);
 		else if (state == CSVTokenKind.Word)
 			word(c);
-		else if (state == CSVTokenKind.Comma)
+		else if (state == CSVTokenKind.Delimiter)
 			start(c);
 		else if (state == CSVTokenKind.ClosedWord)
 			closedWord(c);
 		else
 			end();
 
-		if (state == CSVTokenKind.Comma) {
+		if (state == CSVTokenKind.Delimiter) {
 			return CSVState.End;
 		} else if (state == CSVTokenKind.ClosedStart) {
 			return CSVState.NotWord;
@@ -61,7 +61,7 @@ class CSVTokenAutomaton {
 
 	private void word(char c) {
 		CSVTokenKind ss = findCharKind(c);
-		if (ss == CSVTokenKind.Comma) {
+		if (ss == CSVTokenKind.Delimiter) {
 			end();
 		}
 	}
@@ -75,15 +75,15 @@ class CSVTokenAutomaton {
 
 	private void closedEnd(char c) {
 		CSVTokenKind ss = findCharKind(c);
-		if (ss == CSVTokenKind.Comma) {
-			state = CSVTokenKind.Comma;
+		if (ss == CSVTokenKind.Delimiter) {
+			state = CSVTokenKind.Delimiter;
 		}else if(ss==CSVTokenKind.DoubleQ){
 			state=CSVTokenKind.ClosedWord;
 		}
 	}
 
 	private void end() {
-		state = CSVTokenKind.Comma;
+		state = CSVTokenKind.Delimiter;
 	}
 
 	private void closedEnd() {
@@ -93,8 +93,8 @@ class CSVTokenAutomaton {
 	private CSVTokenKind findCharKind(char c) {
 		if (c == '\"') {
 			return CSVTokenKind.DoubleQ;
-		} else if (c == ',') {
-			return CSVTokenKind.Comma;
+		} else if (c == '\t') {
+			return CSVTokenKind.Delimiter;
 		} else {
 			return CSVTokenKind.Word;
 		}
@@ -104,7 +104,7 @@ class CSVTokenAutomaton {
 		CSVTokenKind k = findCharKind(c);
 		if (k == CSVTokenKind.DoubleQ)
 			state = CSVTokenKind.ClosedStart;
-		else if (k == CSVTokenKind.Comma)
+		else if (k == CSVTokenKind.Delimiter)
 			state = k;
 		else
 			state = CSVTokenKind.Word;
