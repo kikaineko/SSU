@@ -7,13 +7,13 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
 package org.kikaineko.ssu.csv;
 /**
- * 
+ *
  * @author Masayuki Ioki
  *
  */
@@ -21,7 +21,7 @@ class CSVTokenKind {
 	public static CSVTokenKind Start=new CSVTokenKind(0);
 	public static CSVTokenKind DoubleQ=new CSVTokenKind(1);
 	public static CSVTokenKind ClosedStart=new CSVTokenKind(2);
-	public static CSVTokenKind Comma=new CSVTokenKind(3);
+	public static CSVTokenKind Delimiter=new CSVTokenKind(3);
 	public static CSVTokenKind ClosedWord=new CSVTokenKind(4);
 	public static CSVTokenKind ClosedEnd=new CSVTokenKind(5);
 	public static CSVTokenKind Word=new CSVTokenKind(6);
