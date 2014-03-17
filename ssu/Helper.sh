@@ -546,7 +546,18 @@ h_db(){
 	u_db_select_to "${__h_db_table_backup_src}" "${__h_db_table}"
 	
     #TODO db to backup db
-	echo "CREATE TABLE ${__h_db_table_backup_tbl} AS SELECT * FROM ${__h_db_table};">${__h_db_table_backup_src}
+    case ${SSU_DB_TYPE} in
+	"Oracle")
+	    echo "CREATE TABLE ${__h_db_table_backup_tbl} AS SELECT * FROM ${__h_db_table};">${__h_db_table_backup_src}
+	    ;;
+
+	*)
+	    #for DB2
+	    echo "CREATE TABLE ${__h_db_table_backup_tbl} LIKE ${__h_db_table}">${__h_db_table_backup_src}
+	    u_db_sql_exec "${__h_db_table_backup_src}"
+	    echo "INSERT INTO ${__h_db_table_backup_tbl} SELECT * FROM ${__h_db_table}">${__h_db_table_backup_src}
+	    ;;
+    esac
 	u_db_sql_exec "${__h_db_table_backup_src}"
 
 	#all erase
@@ -578,8 +589,9 @@ _ssu_tearDown_h_db(){
 	u_db_insert "${___ssu_tearDown_h_db_table_backup}" "${___ssu_tearDown_h_db_table_name}"
 
 	#TODO recover from backup table
-	echo "INSERT INTO ${___ssu_tearDown_h_db_table_name} SELECT * FROM ${___ssu_tearDown_h_db_table_name_bk};">${___ssu_tearDown_h_db_table_backup}
-	echo "DROP TABLE ${___ssu_tearDown_h_db_table_name_bk};">>${___ssu_tearDown_h_db_table_backup}
+	echo "INSERT INTO ${___ssu_tearDown_h_db_table_name} SELECT * FROM ${___ssu_tearDown_h_db_table_name_bk}">${___ssu_tearDown_h_db_table_backup}
+	u_db_sql_exec "${___ssu_tearDown_h_db_table_backup}"
+	echo "DROP TABLE ${___ssu_tearDown_h_db_table_name_bk}">${___ssu_tearDown_h_db_table_backup}
 	u_db_sql_exec "${___ssu_tearDown_h_db_table_backup}"
 	
 	rm -f "${___ssu_tearDown_h_db_table_backup}"

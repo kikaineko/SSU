@@ -78,6 +78,7 @@ SSU_JDBC_CLASS="";
 SSU_JDBC_URL="";
 SSU_JDBC_USER="";
 SSU_JDBC_PASSWORD="";
+SSU_DB_TYPE="Oracle";
 
 ## Options -end-
 ################################################################################
