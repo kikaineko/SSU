@@ -64,7 +64,7 @@ do
    #########################################################################
     __ssu_report=${SSU_HOME}/evidence/`whoami`/${__ssu_testcase_sh_base}/report.txt
 	if [ -e ${__ssu_report} ]; then
-        grep _s_s_u_ ${__ssu_report} | while read __ssu_prefix __ssu_testname __ssu_arrow __ssu_result
+        grep "##SSU##" ${__ssu_report} | while read __ssu_prefix __ssu_testname __ssu_arrow __ssu_result
         do
             if [ "${__ssu_result}" == "OK!" ]; then
                 echo "<testcase classname='${__ssu_testcase_sh_base}' name='${__ssu_testname}' />">>${SUITE_REPORT}
