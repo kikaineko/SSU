@@ -42,23 +42,23 @@
 #       it should be consistent with your Jenkins setting
 ################################################################################
 
+this_shell_dir=`dirname ${0}`
 SSU_TEST_SUITE_HOME="/usr/local/my/testcase"
 SSU_HOME="/usr/local/my/ssu"
 SUITE_REPORT=${this_shell_dir}/myreport.xml
 
 ##### config section end #######################################################
 
-this_shell_dir=`pwd`
 echo "<testsuite>">${SUITE_REPORT}
 #loop for every shell under suite home
-for __ssu_testcase_sh in ${SSU_TEST_SUITE_HOME}/*.sh
+#for __ssu_testcase_sh in ${SSU_TEST_SUITE_HOME}/*.sh
+for __ssu_testcase_sh in `find ${SSU_TEST_SUITE_HOME} -name "*.sh" 2>/dev/null`
 do
-	__ssu_testcase_sh_base=`basename ${__ssu_testcase_sh}`
+    __ssu_testcase_sh_base=`basename ${__ssu_testcase_sh}`
    #########################################################################
    ####execute the test shell.
    #########################################################################
-   cd ${SSU_TEST_SUITE_HOME} 
-   sh ${__ssu_testcase_sh_base}>${this_shell_dir}/__suite_result_tmpfile 2>&1
+   sh ${__ssu_testcase_sh}>${this_shell_dir}/__suite_result_tmpfile 2>&1
    #########################################################################
    ####compile the report in JUnit format.
    #########################################################################
