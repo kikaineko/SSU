@@ -42,29 +42,29 @@
 #       it should be consistent with your Jenkins setting
 ################################################################################
 
+this_shell_dir=`dirname ${0}`
 SSU_TEST_SUITE_HOME="/usr/local/my/testcase"
 SSU_HOME="/usr/local/my/ssu"
 SUITE_REPORT=${this_shell_dir}/myreport.xml
 
 ##### config section end #######################################################
 
-this_shell_dir=`pwd`
 echo "<testsuite>">${SUITE_REPORT}
 #loop for every shell under suite home
-for __ssu_testcase_sh in ${SSU_TEST_SUITE_HOME}/*.sh
+#for __ssu_testcase_sh in ${SSU_TEST_SUITE_HOME}/*.sh
+for __ssu_testcase_sh in `find ${SSU_TEST_SUITE_HOME} -name "*.sh" 2>/dev/null`
 do
-	__ssu_testcase_sh_base=`basename ${__ssu_testcase_sh}`
+    __ssu_testcase_sh_base=`basename ${__ssu_testcase_sh}`
    #########################################################################
    ####execute the test shell.
    #########################################################################
-   cd ${SSU_TEST_SUITE_HOME} 
-   sh ${__ssu_testcase_sh_base}>${this_shell_dir}/__suite_result_tmpfile 2>&1
+   sh ${__ssu_testcase_sh}>${this_shell_dir}/__suite_result_tmpfile 2>&1
    #########################################################################
    ####compile the report in JUnit format.
    #########################################################################
     __ssu_report=${SSU_HOME}/evidence/`whoami`/${__ssu_testcase_sh_base}/report.txt
 	if [ -e ${__ssu_report} ]; then
-        grep _s_s_u_ ${__ssu_report} | while read __ssu_prefix __ssu_testname __ssu_arrow __ssu_result
+        grep "##SSU##" ${__ssu_report} | while read __ssu_prefix __ssu_testname __ssu_arrow __ssu_result
         do
             if [ "${__ssu_result}" == "OK!" ]; then
                 echo "<testcase classname='${__ssu_testcase_sh_base}' name='${__ssu_testname}' />">>${SUITE_REPORT}

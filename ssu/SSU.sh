@@ -78,6 +78,7 @@ SSU_JDBC_CLASS="";
 SSU_JDBC_URL="";
 SSU_JDBC_USER="";
 SSU_JDBC_PASSWORD="";
+SSU_DB_TYPE="Oracle";
 
 ## Options -end-
 ################################################################################
@@ -332,10 +333,10 @@ _ssu_DoSSU(){
 		#result testing
 		if [ ${___ssu_DoSSU_test_rc} -eq 0 ] 
 		then 
-			echo "    _s_s_u_ $_ssu_CurrentTestName  -> OK!" >> "$_ssu_REPORT_FILE"
+			echo "    ##SSU## $_ssu_CurrentTestName  -> OK!" >> "$_ssu_REPORT_FILE"
 			_ssu_countOfSuccessTest=$((${_ssu_countOfSuccessTest}+1))
 		else
-			echo "    _s_s_u_ $_ssu_CurrentTestName  -> ERROR!" >> "$_ssu_REPORT_FILE"
+			echo "    ##SSU## $_ssu_CurrentTestName  -> ERROR!" >> "$_ssu_REPORT_FILE"
 			_ssu_countOfFailedTest=$((${_ssu_countOfFailedTest}+1))
 			___ssu_DoSSU_color="red"
 			_ssu_suite_color="red"
