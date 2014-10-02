@@ -890,8 +890,11 @@ _ssu_bar_test() {
     ((___ssu_bar_test_post=___ssu_bar_test_pre + 1))
 
     typeset ___ssu_bar_test_sb=`printf "%-${_ssu_LENG}.${_ssu_LENG}s" " ${___ssu_bar_test_testname} (done: ${___ssu_bar_test_cnt}/${___ssu_bar_test_max}) "`
+    typeset ___ssu_bar_test_p1=""
 
-    typeset ___ssu_bar_test_p1=`echo "$___ssu_bar_test_sb"| cut -c 1-$___ssu_bar_test_pre`
+    if [[ $___ssu_bar_test_pre != 0 ]]; then
+      ___ssu_bar_test_p1=`echo "$___ssu_bar_test_sb"| cut -c 1-$___ssu_bar_test_pre`
+    fi
     typeset ___ssu_bar_test_p2=`echo "$___ssu_bar_test_sb"| cut -c $___ssu_bar_test_post-$_ssu_LENG`
 
     typeset ___ssu_bar_test_col=$_ssu_RED
